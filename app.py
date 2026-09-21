@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import gdown
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -17,7 +18,7 @@ from sklearn.metrics import (
 
 st.set_page_config(page_title="Predicción de enfermedad cardíaca", layout="wide")
 
-DATA_URL = "https://drive.google.com/uc?export=download&id=1ch-he5nfIQyue1eM8ZCEUX0LS8vsn4PY"
+FILE_ID = "1ch-he5nfIQyue1eM8ZCEUX0LS8vsn4PY"
 
 FEATURE_LABELS = {
     "age": "Edad",
@@ -37,9 +38,13 @@ FEATURE_LABELS = {
 
 
 # mismo dataset y limpieza que en el notebook (quita los 723 duplicados)
+# uso gdown en vez de pd.read_csv directo porque Drive a veces regresa una
+# página de confirmación (HTML) en lugar del CSV, y eso tronaba en Streamlit Cloud
 @st.cache_data
 def load_data():
-    df = pd.read_csv(DATA_URL)
+    local_path = "heart.csv"
+    gdown.download(id=FILE_ID, output=local_path, quiet=True)
+    df = pd.read_csv(local_path)
     df = df.drop_duplicates()
     return df
 

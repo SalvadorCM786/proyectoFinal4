@@ -37,9 +37,6 @@ FEATURE_LABELS = {
 }
 
 
-# mismo dataset y limpieza que en el notebook (quita los 723 duplicados)
-# uso gdown en vez de pd.read_csv directo porque Drive a veces regresa una
-# página de confirmación (HTML) en lugar del CSV, y eso tronaba en Streamlit Cloud
 @st.cache_data
 def load_data():
     local_path = "heart.csv"
@@ -49,7 +46,6 @@ def load_data():
     return df
 
 
-# entrena los 4 modelos una sola vez y deja todo listo para las pestañas
 @st.cache_resource
 def train_models(df):
     X = df.drop("target", axis=1)
@@ -103,9 +99,8 @@ def train_models(df):
 
 
 def main():
-    st.image("assets/banner.jpg", use_container_width=True)
     st.title("Predicción de enfermedad cardíaca")
-    st.caption("App basada en el proyecto del módulo 3: carga y limpieza del dataset, comparación de 4 modelos y predicción para un paciente nuevo.")
+    st.caption("App creada para el proyecto del módulo 4: carga y limpieza del dataset, comparación de 4 modelos y predicción para un paciente nuevo.")
 
     df = load_data()
     state = train_models(df)
